@@ -260,7 +260,8 @@
 {
     NSURL *requestURL = request.URL;
     NSString *scheme = requestURL.scheme;
-    BOOL whitelistedSafe = [@"http" isEqualToString:scheme] || [@"https" isEqualToString:scheme] || [@"about:blank" isEqualToString:requestURL.absoluteString];
+    NSString *absolute = requestURL.absoluteString;
+    BOOL whitelistedSafe = [@"http" isEqualToString:scheme] || [@"https" isEqualToString:scheme] || (absolute && [@"about:blank" isEqualToString:absolute]);
 
     // Do not allow redirects to dangerous protocols such as file://
     if (!whitelistedSafe) {
