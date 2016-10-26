@@ -30,7 +30,10 @@
         if (!attrName) {
             continue;
         }
-        dictionary[attrName] = [attribute stringValue];
+        NSString *attributeStringValue = [attribute stringValue];
+        if (attributeStringValue != nil) {
+            [dictionary setObject:attributeStringValue forKey:attrName];
+        }
     }
     return dictionary;
 }
@@ -107,11 +110,41 @@
             dictionaryWithObject: SULocalizedString(@"An error occurred while parsing the update feed.", nil)
                           forKey: NSLocalizedDescriptionKey];
         if (error) {
-            userInfo[NSUnderlyingErrorKey] = error;
+            [userInfo setObject:error forKey:NSUnderlyingErrorKey];
         }
         [self reportError:[NSError errorWithDomain:SUSparkleErrorDomain
                                               code:SUAppcastParseError
                                           userInfo:userInfo]];
+    }
+}
+
+- (NSDictionary *)attributesOfNode:(NSXMLElement *)node
+{
+    NSEnumerator *attributeEnum = [[node attributes] objectEnumerator];
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+
+    for (NSXMLNode *attribute in attributeEnum) {
+        NSString *attrName = [self sparkleNamespacedNameOfNode:attribute];
+        if (!attrName) {
+            continue;
+        }
+        NSString *stringValue = [attribute stringValue];
+        if (stringValue) {
+            [dictionary setObject:stringValue forKey:attrName];
+        }
+    }
+    return dictionary;
+}
+
+-(NSString *)sparkleNamespacedNameOfNode:(NSXMLNode *)node {
+    // XML namespace prefix is semantically meaningless, so compare namespace URI
+    // NS URI isn't used to fetch anything, and must match exactly, so we look for http:// not https://
+    if ([[node URI] isEqualToString:@"http://www.andymatuschak.org/xml-namespaces/sparkle"]) {
+        NSString *localName = [node localName];
+        assert(localName);
+        return [@"sparkle:" stringByAppendingString:localName];
+    } else {
+        return [node name]; // Backwards compatibility
     }
 }
 
@@ -147,12 +180,12 @@
         if ([[node children] count]) {
             node = [node childAtIndex:0];
             while (nil != node) {
-                NSString *name = [node name];
+                NSString *name = [self sparkleNamespacedNameOfNode:node];
                 if (name) {
-                    NSMutableArray *nodes = nodesDict[name];
+                    NSMutableArray *nodes = [nodesDict objectForKey:name];
                     if (nodes == nil) {
                         nodes = [NSMutableArray array];
-                        nodesDict[name] = nodes;
+                        [nodesDict setObject:nodes forKey:name];
                     }
                     [nodes addObject:node];
                 }
@@ -161,11 +194,11 @@
         }
 
         for (NSString *name in nodesDict) {
-            node = [self bestNodeInNodes:nodesDict[name]];
+            node = [self bestNodeInNodes:[nodesDict objectForKey:name]];
             if ([name isEqualToString:SURSSElementEnclosure]) {
                 // enclosure is flattened as a separate dictionary for some reason
-                NSDictionary *encDict = [(NSXMLElement *)node attributesAsDictionary];
-                dict[name] = encDict;
+                NSDictionary *encDict = [self attributesOfNode:(NSXMLElement *)node];
+                [dict setObject:encDict forKey:name];
 			}
             else if ([name isEqualToString:SURSSElementPubDate]) {
                 // We don't want to parse and create a NSDate instance -
@@ -173,7 +206,7 @@
                 // than it being accessible from SUAppcastItem
                 NSString *dateString = node.stringValue;
                 if (dateString) {
-                    dict[name] = dateString;
+                    [dict setObject:dateString forKey:name];
                 }
 			}
 			else if ([name isEqualToString:SUAppcastElementDeltas]) {
@@ -181,10 +214,10 @@
                 NSEnumerator *childEnum = [[node children] objectEnumerator];
                 for (NSXMLNode *child in childEnum) {
                     if ([[child name] isEqualToString:SURSSElementEnclosure]) {
-                        [deltas addObject:[(NSXMLElement *)child attributesAsDictionary]];
+                        [deltas addObject:[self attributesOfNode:(NSXMLElement *)child]];
                     }
                 }
-                dict[name] = deltas;
+                [dict setObject:deltas forKey:name];
 			}
             else if ([name isEqualToString:SUAppcastElementTags]) {
                 NSMutableArray *tags = [NSMutableArray array];
@@ -195,13 +228,13 @@
                         [tags addObject:childName];
                     }
                 }
-                dict[name] = tags;
+                [dict setObject:tags forKey:name];
             }
 			else if (name != nil) {
                 // add all other values as strings
                 NSString *theValue = [[node stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 if (theValue != nil) {
-                    dict[name] = theValue;
+                    [dict setObject:theValue forKey:name];
                 }
             }
         }
@@ -261,7 +294,7 @@
 {
     // We use this method to pick out the localized version of a node when one's available.
     if ([nodes count] == 1)
-        return nodes[0];
+        return [nodes objectAtIndex:0];
     else if ([nodes count] == 0)
         return nil;
 
@@ -272,12 +305,12 @@
         lang = [[node attributeForName:@"xml:lang"] stringValue];
         [languages addObject:(lang ? lang : @"")];
     }
-    lang = [NSBundle preferredLocalizationsFromArray:languages][0];
+    lang = [[NSBundle preferredLocalizationsFromArray:languages] objectAtIndex:0];
     i = [languages indexOfObject:([languages containsObject:lang] ? lang : @"")];
     if (i == NSNotFound) {
         i = 0;
     }
-    return nodes[i];
+    return [nodes objectAtIndex:i];
 }
 
 - (SUAppcast *)copyWithoutDeltaUpdates {

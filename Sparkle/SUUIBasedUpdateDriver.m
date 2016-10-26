@@ -98,8 +98,9 @@
         alert.informativeText = [NSString stringWithFormat:SULocalizedString(@"%@ %@ is currently the newest version available.", nil), [self.host name], [self.host displayVersion]];
         [alert addButtonWithTitle:SULocalizedString(@"OK", nil)];
         [self showAlert:alert];
-        [self abortUpdate];
     }
+    
+    [self abortUpdate];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)__unused aNotification
@@ -164,8 +165,11 @@
                 SULocalizedString(@"GB", @"the unit for gigabytes")];
     }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpartial-availability"
     return [NSByteCountFormatter stringFromByteCount:value
                                           countStyle:NSByteCountFormatterCountStyleFile];
+#pragma clang diagnostic pop
 }
 
 - (void)download:(NSURLDownload *)__unused download didReceiveDataOfLength:(NSUInteger)length
