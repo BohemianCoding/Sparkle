@@ -980,7 +980,10 @@ static BOOL SUMakeRefFromURL(NSURL *url, FSRef *ref, NSError **error) {
 #if __MAC_OS_X_VERSION_MIN_REQUIRED < 1080
     if (!canUseNewTrashAPI) {
         NSString *tempParentPath = tempItemURL.URLByDeletingLastPathComponent.path;
-        success = [[NSWorkspace sharedWorkspace] performFileOperation:NSWorkspaceRecycleOperation source:tempParentPath destination:@"" files:@[tempItemURL.lastPathComponent] tag:NULL];
+        NSString *name = tempItemURL.lastPathComponent;
+        if (name) {
+            success = [[NSWorkspace sharedWorkspace] performFileOperation:NSWorkspaceRecycleOperation source:tempParentPath destination:@"" files:@[name] tag:NULL];
+        }
         if (!success && error != NULL) {
             *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileNoSuchFileError userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Failed to move file %@ into the trash.", tempItemURL.lastPathComponent] }];
         }
