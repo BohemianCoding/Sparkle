@@ -91,4 +91,4 @@ WARNING_CFLAGS_WEAK_RECEIVER = -Wno-receiver-is-weak
 WARNING_CFLAGS_WEAK_RECEIVER[sdk=macosx10.12] =
 
 // Turn on all warnings, then disable a few which are almost impossible to avoid
-WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expression $(WARNING_CGLAGS_WEAK_RECEIVER) -Wno-arc-repeated-use-of-weak -Wno-auto-import $(WARNING_CFLAGS_EXTRA)
+WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expression $(WARNING_CGLAGS_WEAK_RECEIVER) -Wno-arc-repeated-use-of-weak -Wno-auto-import -Wno-gnu-zero-variadic-macro-arguments $(WARNING_CFLAGS_EXTRA)
