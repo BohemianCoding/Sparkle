@@ -6,13 +6,12 @@
 //  Copyright 2006 Andy Matuschak. All rights reserved.
 //
 
-#import "SUUpdater.h"
-
-#import "SUAppcast.h"
-#import "SUAppcastItem.h"
-#import "SUVersionComparisonProtocol.h"
 #import "SUAppcastItem.h"
 #import "SULog.h"
+#import "SUConstants.h"
+
+
+#include "AppKitPrevention.h"
 
 @interface SUAppcastItem ()
 @property (copy, readwrite) NSString *title;
@@ -24,6 +23,7 @@
 @property (copy, readwrite) NSString *maximumSystemVersion;
 @property (strong, readwrite) NSURL *fileURL;
 @property (copy, readwrite) NSString *versionString;
+@property (copy, readwrite) NSString *osString;
 @property (copy, readwrite) NSString *displayVersionString;
 @property (copy, readwrite) NSDictionary *deltaUpdates;
 @property (strong, readwrite) NSURL *infoURL;
@@ -36,6 +36,7 @@
 @synthesize displayVersionString;
 @synthesize DSASignature;
 @synthesize fileURL;
+@synthesize contentLength = _contentLength;
 @synthesize infoURL;
 @synthesize itemDescription;
 @synthesize maximumSystemVersion;
@@ -43,6 +44,7 @@
 @synthesize releaseNotesURL;
 @synthesize title;
 @synthesize versionString;
+@synthesize osString;
 @synthesize propertiesDictionary;
 
 - (BOOL)isDeltaUpdate
@@ -54,6 +56,11 @@
 - (BOOL)isCriticalUpdate
 {
     return [[self.propertiesDictionary objectForKey:SUAppcastElementTags] containsObject:SUAppcastElementCriticalUpdate];
+}
+
+- (BOOL)isMacOsUpdate
+{
+    return self.osString == nil || [self.osString isEqualToString:SUAppcastAttributeValueMacOS];
 }
 
 - (BOOL)isInformationOnlyUpdate
@@ -86,7 +93,7 @@
         }
         if (newVersion == nil) // no sparkle:version attribute anywhere?
         {
-            SULog(@"warning: <%@> for URL '%@' is missing %@ attribute. Version comparison may be unreliable. Please always specify %@", SURSSElementEnclosure, [enclosure objectForKey:SURSSAttributeURL], SUAppcastAttributeVersion, SUAppcastAttributeVersion);
+            SULog(SULogLevelError, @"warning: <%@> for URL '%@' is missing %@ attribute. Version comparison may be unreliable. Please always specify %@", SURSSElementEnclosure, [enclosure objectForKey:SURSSAttributeURL], SUAppcastAttributeVersion, SUAppcastAttributeVersion);
 
             // Separate the url by underscores and take the last component, as that'll be closest to the end,
             // then we remove the extension. Hopefully, this will be the version.
@@ -111,7 +118,7 @@
         NSString *theInfoURL = [dict objectForKey:SURSSElementLink];
         if (theInfoURL) {
             if (![theInfoURL isKindOfClass:[NSString class]]) {
-                SULog(@"%@ -%@ Info URL is not of valid type.", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
+                SULog(SULogLevelError, @"%@ -%@ Info URL is not of valid type.", NSStringFromClass([self class]), NSStringFromSelector(_cmd));
             } else {
                 self.infoURL = [NSURL URLWithString:theInfoURL];
             }
@@ -133,6 +140,15 @@
             }
             return nil;
         }
+        
+        if (enclosureURLString) {
+            NSString *enclosureLengthString = [enclosure objectForKey:SURSSAttributeLength];
+            long long contentLength = 0;
+            if (enclosureLengthString != nil) {
+                contentLength = [enclosureLengthString longLongValue];
+            }
+            _contentLength = (contentLength > 0) ? (uint64_t)contentLength : 0;
+        }
 
         if (enclosureURLString) {
             // Sparkle used to always URL-encode, so for backwards compatibility spaces in URLs must be forgiven.
@@ -141,8 +157,9 @@
         }
         if (enclosure) {
             self.DSASignature = [enclosure objectForKey:SUAppcastAttributeDSASignature];
+            self.osString = [enclosure objectForKey:SUAppcastAttributeOsType];
         }
-
+  
         self.versionString = newVersion;
         self.minimumSystemVersion = [dict objectForKey:SUAppcastElementMinimumSystemVersion];
         self.maximumSystemVersion = [dict objectForKey:SUAppcastElementMaximumSystemVersion];
@@ -163,7 +180,7 @@
         if (releaseNotesString) {
             NSURL *url = [NSURL URLWithString:releaseNotesString];
             if ([url isFileURL]) {
-                SULog(@"Release notes with file:// URLs are not supported");
+                SULog(SULogLevelError, @"Release notes with file:// URLs are not supported");
             } else {
                 self.releaseNotesURL = url;
             }

@@ -10,6 +10,9 @@
 #import "SUFileManager.h"
 #import "SUFileOperationConstants.h"
 
+
+#include "AppKitPrevention.h"
+
 // If we fail, we exit with a unique status code
 // We don't try to NSLog because the logs can't be seen anywhere,
 // and we don't want to log to a file irresponsibly (especially as root),
@@ -128,10 +131,12 @@ int main(int argc, const char *argv[])
             
             NSTask *task = [[NSTask alloc] init];
             task.launchPath = installerPath;
-            task.arguments = @[@"-pkg", filepath, @"-target", @"/"];
-            // Output won't show up anyway, so we may as well ignore it
+            task.arguments = @[@"-verboseR",
+                               @"-pkg", filepath,
+                               @"-target", @"/"];
             task.standardError = [NSPipe pipe];
-            task.standardOutput = [NSPipe pipe];
+            // Pass through verbose output from the installer, so the caller can parse it
+            task.standardOutput = [NSFileHandle fileHandleWithStandardOutput];
             
             @try {
                 [task launch];

@@ -7,21 +7,22 @@
 //
 
 #import "SUScheduledUpdateDriver.h"
-#import "SUUpdater.h"
-
-#import "SUAppcast.h"
-#import "SUAppcastItem.h"
-#import "SUVersionComparisonProtocol.h"
+#import "SUUpdaterPrivate.h"
+#import "SUUpdaterDelegate.h"
 
 @interface SUScheduledUpdateDriver ()
-
-@property (assign) BOOL showErrors;
 
 @end
 
 @implementation SUScheduledUpdateDriver
 
-@synthesize showErrors;
+- (instancetype)initWithUpdater:(id<SUUpdaterPrivate>)anUpdater
+{
+    if ((self = [super initWithUpdater:anUpdater])) {
+        self.showErrors = NO;
+    }
+    return self;
+}
 
 - (void)didFindValidUpdate
 {
@@ -31,7 +32,8 @@
 
 - (void)didNotFindUpdate
 {
-    id<SUUpdaterDelegate> updaterDelegate = [self.updater delegate];
+    id<SUUpdaterPrivate> updater = self.updater;
+    id<SUUpdaterDelegate> updaterDelegate = [updater delegate];
 
     if ([updaterDelegate respondsToSelector:@selector(updaterDidNotFindUpdate:)]) {
         [updaterDelegate updaterDidNotFindUpdate:self.updater];
@@ -41,20 +43,8 @@
     [self abortUpdate]; // Don't tell the user that no update was found; this was a scheduled update.
 }
 
-- (void)abortUpdateWithError:(NSError *)error
-{
-    if (self.showErrors) {
-        [super abortUpdateWithError:error];
-    } else {
-        // Call delegate separately here because otherwise it won't know we stopped.
-        // Normally this gets called by the superclass
-        id<SUUpdaterDelegate> updaterDelegate = [self.updater delegate];
-        if ([updaterDelegate respondsToSelector:@selector(updater:didAbortWithError:)]) {
-            [updaterDelegate updater:self.updater didAbortWithError:error];
-        }
-
-        [self abortUpdate];
-    }
+- (BOOL)shouldDisableKeyboardShortcutForInstallButton {
+    return YES;
 }
 
 @end
