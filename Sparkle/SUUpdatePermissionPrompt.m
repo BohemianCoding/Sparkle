@@ -52,7 +52,7 @@ static NSString *const SUUpdatePermissionPromptTouchBarIndentifier = @"" SPARKLE
 
 - (BOOL)shouldAskAboutProfile
 {
-    return [[self.host objectForInfoDictionaryKey:SUEnableSystemProfilingKey] boolValue];
+    return [(NSString *)[self.host objectForInfoDictionaryKey:SUEnableSystemProfilingKey] boolValue];
 }
 
 - (instancetype)initWithHost:(SUHost *)aHost systemProfile:(NSArray *)profile reply:(void (^)(SUUpdatePermissionResponse *))reply
