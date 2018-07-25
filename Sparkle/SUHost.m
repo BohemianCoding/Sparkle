@@ -161,7 +161,13 @@
 
 - (BOOL)boolForInfoDictionaryKey:(NSString *)key
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-messaging-id"
+    
     return [[self objectForInfoDictionaryKey:key] boolValue];
+    
+#pragma clang diagnostic pop
+
 }
 
 - (id)objectForUserDefaultsKey:(NSString *)defaultName

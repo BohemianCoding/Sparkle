@@ -239,16 +239,16 @@ int main(int __unused argc, const char __unused *argv[])
         
         NSApplication *application = [NSApplication sharedApplication];
 
-        BOOL shouldShowUI = (args.count > 6) ? [[args objectAtIndex:6] boolValue] : YES;
+        BOOL shouldShowUI = (args.count > 6) ? [(NSString *)[args objectAtIndex:6] boolValue] : YES;
         if (shouldShowUI) {
             [application activateIgnoringOtherApps:YES];
         }
         
         AppInstaller *appInstaller = [[AppInstaller alloc] initWithHostPath:[args objectAtIndex:1]
                                                                relaunchPath:[args objectAtIndex:2]
-                                                            parentProcessId:[[args objectAtIndex:3] intValue]
+                                                            parentProcessId:[(NSString *)[args objectAtIndex:3] intValue]
                                                            updateFolderPath:[args objectAtIndex:4]
-                                                             shouldRelaunch:(args.count > 5) ? [[args objectAtIndex:5] boolValue] : YES
+                                                             shouldRelaunch:(args.count > 5) ? [(NSString *)[args objectAtIndex:5] boolValue] : YES
                                                                shouldShowUI:shouldShowUI];
         [application setDelegate:appInstaller];
         [application run];

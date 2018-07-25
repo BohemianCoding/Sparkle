@@ -55,7 +55,7 @@
 
 - (BOOL)isCriticalUpdate
 {
-    return [[self.propertiesDictionary objectForKey:SUAppcastElementTags] containsObject:SUAppcastElementCriticalUpdate];
+    return [(NSMutableArray *)[self.propertiesDictionary objectForKey:SUAppcastElementTags] containsObject:SUAppcastElementCriticalUpdate];
 }
 
 - (BOOL)isMacOsUpdate
@@ -97,9 +97,9 @@
 
             // Separate the url by underscores and take the last component, as that'll be closest to the end,
             // then we remove the extension. Hopefully, this will be the version.
-            NSArray *fileComponents = [[enclosure objectForKey:SURSSAttributeURL] componentsSeparatedByString:@"_"];
+            NSArray *fileComponents = [(NSString *)[enclosure objectForKey:SURSSAttributeURL] componentsSeparatedByString:@"_"];
             if ([fileComponents count] > 1) {
-                newVersion = [[fileComponents lastObject] stringByDeletingPathExtension];
+                newVersion = [(NSString *)[fileComponents lastObject] stringByDeletingPathExtension];
             }
         }
 
