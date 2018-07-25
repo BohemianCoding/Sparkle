@@ -300,7 +300,12 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
 - (void)checkForUpdatesInBackground
 {
     // Do not use reachability for a preflight check. This can be deceptive and a bad idea. Apple does not recommend doing it.
-    SUUpdateDriver *theUpdateDriver = [[([self automaticallyDownloadsUpdates] ? [SUAutomaticUpdateDriver class] : [SUScheduledUpdateDriver class])alloc] initWithUpdater:self];
+    SUUpdateDriver *theUpdateDriver;
+    if ([self automaticallyDownloadsUpdates]) {
+        theUpdateDriver = [[SUAutomaticUpdateDriver alloc] initWithUpdater:self];
+    } else {
+        theUpdateDriver = [[SUScheduledUpdateDriver alloc] initWithUpdater:self];
+    }
     
     [self checkForUpdatesWithDriver:theUpdateDriver];
 }
@@ -536,7 +541,7 @@ static NSString *escapeURLComponent(NSString *str) {
     // Build up the parameterized URL.
     NSMutableArray *parameterStrings = [NSMutableArray array];
     for (NSDictionary *currentProfileInfo in parameters) {
-        [parameterStrings addObject:[NSString stringWithFormat:@"%@=%@", escapeURLComponent([[currentProfileInfo objectForKey:@"key"] description]), escapeURLComponent([[currentProfileInfo objectForKey:@"value"] description])]];
+        [parameterStrings addObject:[NSString stringWithFormat:@"%@=%@", escapeURLComponent([(NSString *)[currentProfileInfo objectForKey:@"key"] description]), escapeURLComponent([(NSString *)[currentProfileInfo objectForKey:@"value"] description])]];
     }
 
     NSString *separatorCharacter = @"?";
