@@ -10,7 +10,7 @@
 #import "SUConstants.h"
 #include <sys/mount.h> // For statfs for isRunningOnReadOnlyVolume
 #import "SULog.h"
-
+#import "SUSignatures.h"
 
 #include "AppKitPrevention.h"
 
@@ -26,6 +26,7 @@
 @property (nonatomic, readonly) BOOL isMainBundle;
 @property (copy) NSString *defaultsDomain;
 @property (assign) BOOL usesStandardUserDefaults;
+@property (readonly, copy) NSString *publicDSAKey;
 
 @end
 
@@ -38,8 +39,8 @@
 
 - (instancetype)initWithBundle:(NSBundle *)aBundle
 {
-	if ((self = [super init]))
-	{
+    if ((self = [super init]))
+    {
         NSParameterAssert(aBundle);
         self.bundle = aBundle;
         if (![self.bundle bundleIdentifier]) {
@@ -109,6 +110,11 @@
     return (statfs_info.f_flags & MNT_RDONLY) != 0;
 }
 
+- (NSString *__nullable)publicEDKey
+{
+    return [self objectForInfoDictionaryKey:SUPublicEDKeyKey];
+}
+
 - (NSString *__nullable)publicDSAKey
 {
     // Maybe the key is just a string in the Info.plist.
@@ -133,6 +139,11 @@
         SULog(SULogLevelError, @"Error loading %@: %@", keyPath, error);
     }
     return key;
+}
+
+- (SUPublicKeys *)publicKeys
+{
+    return [[SUPublicKeys alloc] initWithDsa:[self publicDSAKey] ed:[self publicEDKey]];
 }
 
 - (NSString * __nullable)publicDSAKeyFileKey
@@ -161,13 +172,7 @@
 
 - (BOOL)boolForInfoDictionaryKey:(NSString *)key
 {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wobjc-messaging-id"
-    
-    return [[self objectForInfoDictionaryKey:key] boolValue];
-    
-#pragma clang diagnostic pop
-
+    return [(NSNumber *)[self objectForInfoDictionaryKey:key] boolValue];
 }
 
 - (id)objectForUserDefaultsKey:(NSString *)defaultName
