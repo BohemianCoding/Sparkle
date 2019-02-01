@@ -52,7 +52,7 @@ static NSString *const SUUpdatePermissionPromptTouchBarIndentifier = @"" SPARKLE
 
 - (BOOL)shouldAskAboutProfile
 {
-    return [(NSString *)[self.host objectForInfoDictionaryKey:SUEnableSystemProfilingKey] boolValue];
+    return [(NSNumber *)[self.host objectForInfoDictionaryKey:SUEnableSystemProfilingKey] boolValue];
 }
 
 - (instancetype)initWithHost:(SUHost *)aHost systemProfile:(NSArray *)profile reply:(void (^)(SUUpdatePermissionResponse *))reply
@@ -159,7 +159,7 @@ static NSString *const SUUpdatePermissionPromptTouchBarIndentifier = @"" SPARKLE
     [self.moreInfoView setHidden:!self.isShowingMoreInfo];
 }
 
-- (IBAction)finishPrompt:(id)sender
+- (IBAction)finishPrompt:(NSButton *)sender
 {
     SUUpdatePermissionResponse *response = [[SUUpdatePermissionResponse alloc] initWithAutomaticUpdateChecks:([(NSControl *)sender tag] == 1) sendSystemProfile:self.shouldSendProfile];
     self.reply(response);
