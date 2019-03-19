@@ -1915,6 +1915,8 @@
 				ORGANIZATIONNAME = "Sparkle Project";
 				TargetAttributes = {
 					55C14BB6136EEF1500649790 = {
+						DevelopmentTeam = WUGMZZ5K46;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.HardenedRuntime = {
 								enabled = 1;
