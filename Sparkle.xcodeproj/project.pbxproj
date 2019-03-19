@@ -639,6 +639,7 @@
 		34074BA61FEAC417001CB3A5 /* SPUDownloaderDeprecated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPUDownloaderDeprecated.m; sourceTree = "<group>"; };
 		342731461FF58E4F00285FBD /* SPUDownloaderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SPUDownloaderTest.swift; sourceTree = "<group>"; };
 		3772FEA813DE0B6B00F79537 /* SUVersionDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUVersionDisplayProtocol.h; sourceTree = "<group>"; };
+		434A3A5C22411F4900BA738F /* Autoupdate.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Autoupdate.entitlements; sourceTree = "<group>"; };
 		4607BEA21948443800EF8DA4 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Sparkle.strings; sourceTree = "<group>"; };
 		4607BEA31948443800EF8DA4 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nb; path = nb.lproj/SUAutomaticUpdateAlert.xib; sourceTree = "<group>"; };
 		4607BEA41948443800EF8DA4 /* nb */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nb; path = nb.lproj/SUUpdateAlert.xib; sourceTree = "<group>"; };
@@ -1099,6 +1100,7 @@
 		0867D691FE84028FC02AAC07 /* Sparkle */ = {
 			isa = PBXGroup;
 			children = (
+				434A3A5C22411F4900BA738F /* Autoupdate.entitlements */,
 				5AA96C561E0AE0DB00CA4346 /* generate_appcast */,
 				1495006D195FBBBD00BC5B5B /* Sparkle */,
 				14732BB81960EEB600593899 /* Resources */,
@@ -1912,6 +1914,13 @@
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Sparkle Project";
 				TargetAttributes = {
+					55C14BB6136EEF1500649790 = {
+						SystemCapabilities = {
+							com.apple.HardenedRuntime = {
+								enabled = 1;
+							};
+						};
+					};
 					5A5ADED6214EDE4900DF0099 = {
 						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
@@ -2820,6 +2829,7 @@
 			baseConfigurationReference = FA1941D30D94A70100DD942E /* ConfigRelaunchDebug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 			};
 			name = Coverage;
@@ -2907,6 +2917,7 @@
 			baseConfigurationReference = FA1941D30D94A70100DD942E /* ConfigRelaunchDebug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 			};
 			name = Debug;
@@ -2915,6 +2926,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FA1941D40D94A70100DD942E /* ConfigRelaunchRelease.xcconfig */;
 			buildSettings = {
+				ENABLE_HARDENED_RUNTIME = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 			};
 			name = Release;
