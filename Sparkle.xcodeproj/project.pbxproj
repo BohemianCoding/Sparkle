@@ -717,6 +717,8 @@
 		5A5AC5371E0C6D3000998119 /* FeedXML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedXML.swift; sourceTree = "<group>"; };
 		5A5ADED7214EDE4900DF0099 /* sign_update */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sign_update; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A5ADED9214EDE4900DF0099 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		5A88AD0D225CAE7300635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		5A88AD0E225CAEB400635470 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		5AA4DCD01C73E5510078F128 /* SUAppcastTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SUAppcastTest.swift; sourceTree = "<group>"; };
 		5AA96C571E0AE0DB00CA4346 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5AA96C5D1E0AE0F900CA4346 /* Appcast-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Appcast-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -849,8 +851,6 @@
 		61B5F90209C4CEE200B25A18 /* Sparkle Test App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sparkle Test App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B5F90409C4CEE200B25A18 /* TestApplication-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TestApplication-Info.plist"; sourceTree = "<group>"; };
 		61B5F92409C4CFC900B25A18 /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		61B5F92B09C4CFD800B25A18 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		61B5F92D09C4CFD800B25A18 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		61B5FB9409C4F04600B25A18 /* SUAppcast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUAppcast.h; sourceTree = "<group>"; };
 		61B5FB9509C4F04600B25A18 /* SUAppcast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUAppcast.m; sourceTree = "<group>"; };
 		61B5FC3F09C4FD4000B25A18 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -1943,14 +1943,9 @@
 			};
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "Sparkle" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				English,
-				Japanese,
-				French,
-				German,
-				Italian,
 				zh_TW,
 				en,
 				ca,
@@ -2682,7 +2677,6 @@
 				1A985A3A1C5C32A50001163A /* da */,
 				1A985A341C5C329E0001163A /* de */,
 				1A985A531C5C32BD0001163A /* el */,
-				61B5F92B09C4CFD800B25A18 /* English */,
 				1A985A3B1C5C32A60001163A /* es */,
 				1A985A3C1C5C32A70001163A /* fi */,
 				1A985A331C5C329D0001163A /* fr */,
@@ -2711,6 +2705,7 @@
 				1A985A511C5C32BB0001163A /* uk */,
 				1A985A4A1C5C32B50001163A /* zh-Hans */,
 				1A985A351C5C329E0001163A /* zh-Hant */,
+				5A88AD0D225CAE7300635470 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2718,7 +2713,7 @@
 		61B5F92C09C4CFD800B25A18 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				61B5F92D09C4CFD800B25A18 /* English */,
+				5A88AD0E225CAEB400635470 /* en */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
