@@ -92,3 +92,34 @@ WARNING_CFLAGS_WEAK_RECEIVER[sdk=macosx10.12] =
 
 // Turn on all warnings, then disable a few which are almost impossible to avoid
 WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expression $(WARNING_CGLAGS_WEAK_RECEIVER) -Wno-arc-repeated-use-of-weak -Wno-auto-import -Wno-gnu-zero-variadic-macro-arguments $(WARNING_CFLAGS_EXTRA)
+
+
+
+
+
+// SIGNING
+
+CODE_SIGN_IDENTITY = Mac Developer
+CODE_SIGN_STYLE = Automatic
+DEVELOPMENT_TEAM = WUGMZZ5K46
+PROVISIONING_PROFILE_SPECIFIER =
+ENABLE_HARDENED_RUNTIME = YES
+
+
+// Here we include the local user's settings to override any of the ones specified above.
+#include? "../../BCFoundation/Configs/DeveloperIdentity.xcconfig"
+
+// We need to manipulate these with codesigning
+
+// Release builds
+OTHER_CODE_SIGN_FLAGS_Release = --timestamp
+CODE_SIGN_INJECT_BASE_ENTITLEMENTS_Release = NO
+
+// Debug builds
+OTHER_CODE_SIGN_FLAGS_Debug = --timestamp=none
+CODE_SIGN_INJECT_BASE_ENTITLEMENTS_Debug = YES
+
+// Resolves to one of the above depending on the value of $CONFIGURATION
+OTHER_CODE_SIGN_FLAGS = $(OTHER_CODE_SIGN_FLAGS_$(CONFIGURATION))
+CODE_SIGN_INJECT_BASE_ENTITLEMENTS = $(CODE_SIGN_INJECT_BASE_ENTITLEMENTS_$(CONFIGURATION))
+
