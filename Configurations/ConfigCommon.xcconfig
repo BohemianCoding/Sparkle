@@ -95,31 +95,6 @@ WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expres
 
 
 
-
-
-// SIGNING
-
-CODE_SIGN_IDENTITY = Mac Developer
-CODE_SIGN_STYLE = Automatic
-DEVELOPMENT_TEAM = WUGMZZ5K46
-PROVISIONING_PROFILE_SPECIFIER =
-ENABLE_HARDENED_RUNTIME = YES
-
-
 // Here we include the local user's settings to override any of the ones specified above.
-#include? "../../BCFoundation/Configs/DeveloperIdentity.xcconfig"
-
-// We need to manipulate these with codesigning
-
-// Release builds
-OTHER_CODE_SIGN_FLAGS_Release = --timestamp
-CODE_SIGN_INJECT_BASE_ENTITLEMENTS_Release = NO
-
-// Debug builds
-OTHER_CODE_SIGN_FLAGS_Debug = --timestamp=none
-CODE_SIGN_INJECT_BASE_ENTITLEMENTS_Debug = YES
-
-// Resolves to one of the above depending on the value of $CONFIGURATION
-OTHER_CODE_SIGN_FLAGS = $(OTHER_CODE_SIGN_FLAGS_$(CONFIGURATION))
-CODE_SIGN_INJECT_BASE_ENTITLEMENTS = $(CODE_SIGN_INJECT_BASE_ENTITLEMENTS_$(CONFIGURATION))
+#include "../../BCFoundation/Configs/BCCodeSigning.xcconfig"
 
