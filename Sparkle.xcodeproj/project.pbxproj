@@ -1972,6 +1972,7 @@
 					8DC2EF4F0486A6940098B216 = {
 						DevelopmentTeam = WUGMZZ5K46;
 						LastSwiftMigration = 0920;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
