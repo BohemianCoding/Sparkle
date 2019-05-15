@@ -1925,6 +1925,11 @@
 					};
 					55C14BB6136EEF1500649790 = {
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.HardenedRuntime = {
+								enabled = 1;
+							};
+						};
 					};
 					5A5ADED6214EDE4900DF0099 = {
 						CreatedOnToolsVersion = 10.0;
