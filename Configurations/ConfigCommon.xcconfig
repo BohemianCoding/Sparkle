@@ -92,3 +92,10 @@ WARNING_CFLAGS_WEAK_RECEIVER[sdk=macosx10.12] =
 
 // Turn on all warnings, then disable a few which are almost impossible to avoid
 WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expression $(WARNING_CGLAGS_WEAK_RECEIVER) -Wno-arc-repeated-use-of-weak -Wno-auto-import -Wno-gnu-zero-variadic-macro-arguments $(WARNING_CFLAGS_EXTRA)
+
+
+CODE_SIGN_ENTITLEMENTS = Autoupdate.entitlements
+
+// Here we include the local user's settings to override any of the ones specified above.
+#include "../../BCFoundation/Configs/BCCodeSigning.xcconfig"
+
