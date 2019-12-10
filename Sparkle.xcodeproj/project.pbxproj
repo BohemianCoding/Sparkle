@@ -1910,7 +1910,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = SU;
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Sparkle Project";
 				TargetAttributes = {
