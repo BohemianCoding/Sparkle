@@ -100,11 +100,11 @@ static NSString *const SUAutomaticUpdateAlertTouchBarIndentifier = @"" SPARKLE_B
 {
     if ([self.updateItem isCriticalUpdate])
     {
-        return [NSString stringWithFormat:SULocalizedString(@"%1$@ %2$@ has been downloaded and is ready to use! This is an important update; would you like to install it and relaunch %1$@ now?", nil), [self.host name], [self.updateItem displayVersionString]];
+        return [NSString stringWithFormat:SULocalizedString(@"%@ %@ has been downloaded and is ready to use! This is an important update; would you like to install it and relaunch %@ now?", nil), [self.host name], [self.updateItem displayVersionString], [self.host name]];
     }
     else
     {
-        return [NSString stringWithFormat:SULocalizedString(@"%1$@ %2$@ has been downloaded and is ready to use! Would you like to install it and relaunch %1$@ now?", nil), [self.host name], [self.updateItem displayVersionString]];
+        return [NSString stringWithFormat:SULocalizedString(@"%@ %@ has been downloaded and is ready to use! Would you like to install it and relaunch %@ now?", nil), [self.host name], [self.updateItem displayVersionString], [self.host name]];
     }
 }
 
