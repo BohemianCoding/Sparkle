@@ -12,6 +12,11 @@
 // This list should include the shared headers. It doesn't matter if some of them aren't shared (unless
 // there are name-space collisions) so we can list all of them to start with:
 
+// This warning needs to be switched off - Sketch itself has this warning on, so when FWs try to import
+// this FW, you get build errors. Instead of fixing this third party FW we wallpaper over the cracks.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wquoted-include-in-framework-header"
+
 #import "SUAppcast.h"
 #import "SUAppcastItem.h"
 #import "SUStandardVersionComparator.h"
@@ -31,3 +36,5 @@
 #import "SUCodeSigningVerifier.h"
 
 #endif
+
+#pragma clang diagnostic pop
