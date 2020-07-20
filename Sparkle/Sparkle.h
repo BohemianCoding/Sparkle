@@ -35,6 +35,8 @@
 #import "SPUURLRequest.h"
 #import "SUCodeSigningVerifier.h"
 
+#pragma clang diagnostic pop
+
 #endif
 
-#pragma clang diagnostic pop
+
