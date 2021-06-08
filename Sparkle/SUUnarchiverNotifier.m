@@ -25,8 +25,11 @@
 @synthesize completionBlock = _completionBlock;
 @synthesize progressBlock = _progressBlock;
 
+
+#ifdef __MAC_12_0
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcompletion-handler"
+#endif
 - (instancetype)initWithCompletionBlock:(void (^)(NSError * _Nullable))completionBlock progressBlock:(void (^ _Nullable)(double))progressBlock
 {
     self = [super init];
@@ -36,7 +39,9 @@
     }
     return self;
 }
+#ifdef __MAC_12_0
 #pragma clang diagnostic pop
+#endif
 
 - (void)notifySuccess
 {
