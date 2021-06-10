@@ -26,9 +26,9 @@ ENABLE_STRICT_OBJC_MSGSEND = YES
 GCC_SYMBOLS_PRIVATE_EXTERN = YES
 GCC_INLINES_ARE_PRIVATE_EXTERN = YES
 ARCHS = $(ARCHS_STANDARD)
-MACOSX_DEPLOYMENT_TARGET = 10.9
+MACOSX_DEPLOYMENT_TARGET = 10.10
 PRODUCT_NAME = ${TARGET_NAME}
-PRODUCT_BUNDLE_IDENTIFIER = org.sparkle-project.Sparkle.${PRODUCT_NAME:rfc1034identifier}
+PRODUCT_BUNDLE_IDENTIFIER = $(SPARKLE_BUNDLE_IDENTIFIER).${PRODUCT_NAME:rfc1034identifier}
 
 GCC_PREPROCESSOR_DEFINITIONS_COMMON = SPARKLE_NORMALIZE_INSTALLED_APPLICATION_NAME=$(SPARKLE_NORMALIZE_INSTALLED_APPLICATION_NAME) SPARKLE_AUTOMATED_DOWNGRADES=$(SPARKLE_AUTOMATED_DOWNGRADES) SPARKLE_APPEND_VERSION_NUMBER=$(SPARKLE_APPEND_VERSION_NUMBER) SPARKLE_BUNDLE_IDENTIFIER=\"$(SPARKLE_BUNDLE_IDENTIFIER)\" SPARKLE_RELAUNCH_TOOL_NAME=\"$(SPARKLE_RELAUNCH_TOOL_NAME)\" SPARKLE_FILEOP_TOOL_NAME=\"$(SPARKLE_FILEOP_TOOL_NAME)\"
 
@@ -85,5 +85,19 @@ GCC_WARN_UNUSED_VARIABLE = YES
 // These should be removed once the conversion to ARC is complete
 WARNING_CFLAGS_EXTRA = -Wno-custom-atomic-properties -Wno-implicit-atomic-properties
 
+WARNING_CFLAGS_WEAK_RECEIVER = -Wno-receiver-is-weak
+WARNING_CFLAGS_WEAK_RECEIVER[sdk=macosx10.12] =
+
 // Turn on all warnings, then disable a few which are almost impossible to avoid
 WARNING_CFLAGS = -Wall -Weverything -Wno-unused-macros -Wno-gnu-statement-expression -Wno-arc-repeated-use-of-weak -Wno-auto-import -Wno-gnu-zero-variadic-macro-arguments -Wno-format-non-iso $(WARNING_CFLAGS_EXTRA)
+
+
+CODE_SIGN_ENTITLEMENTS = Autoupdate.entitlements
+
+
+// SKETCH CUSTOMISATIONS
+ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = clr.accent.color
+
+// Here we include the local user's settings to override any of the ones specified above.
+#include "../../BCFoundation/Configs/BCCodeSigning.xcconfig"
+

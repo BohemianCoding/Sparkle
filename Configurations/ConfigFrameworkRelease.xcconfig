@@ -1,2 +1,4 @@
 #include "ConfigFramework.xcconfig"
 
+IBC_NOTICES = NO
+IBCS_NOTICES = NO

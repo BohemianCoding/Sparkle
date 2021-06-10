@@ -113,7 +113,7 @@ static NSString *const SUUpdatePermissionPromptTouchBarIndentifier = @"" SPARKLE
 
 - (NSString *)promptDescription
 {
-    return [NSString stringWithFormat:SULocalizedString(@"Should %1$@ automatically check for updates? You can always check for updates manually from the %1$@ menu.", nil), [self.host name]];
+    return [NSString stringWithFormat:SULocalizedString(@"Should %@ automatically check for updates? You can always check for updates manually from the %@ menu.", nil), [self.host name], [self.host name]];
 }
 
 - (IBAction)toggleMoreInfo:(id)__unused sender
@@ -161,7 +161,7 @@ static NSString *const SUUpdatePermissionPromptTouchBarIndentifier = @"" SPARKLE
 
 - (IBAction)finishPrompt:(NSButton *)sender
 {
-    SUUpdatePermissionResponse *response = [[SUUpdatePermissionResponse alloc] initWithAutomaticUpdateChecks:([sender tag] == 1) sendSystemProfile:self.shouldSendProfile];
+    SUUpdatePermissionResponse *response = [[SUUpdatePermissionResponse alloc] initWithAutomaticUpdateChecks:([(NSControl *)sender tag] == 1) sendSystemProfile:self.shouldSendProfile];
     self.reply(response);
     
     [[self window] close];

@@ -52,6 +52,9 @@
 - (void)reportError:(NSError *)error;
 - (NSXMLNode *)bestNodeInNodes:(NSArray *)nodes;
 
+/// Is non null during the download completion handler if there was an image node in the appcast. Set back to null after completion handler is called.
+@property (strong) NSURL *imageURL;
+
 @end
 
 @implementation SUAppcast
@@ -61,6 +64,7 @@
 @synthesize httpHeaders;
 @synthesize download;
 @synthesize items;
+@synthesize imageURL;
 
 - (void)fetchAppcastFromURL:(NSURL *)url inBackground:(BOOL)background completionBlock:(void (^)(NSError *))block
 {
@@ -134,6 +138,7 @@
                                               code:SUDownloadError
                                           userInfo:userInfo]];
     }
+    self.imageURL = nil;
 }
 
 - (void)downloaderDidFailWithError:(NSError *)error
@@ -191,6 +196,11 @@
     NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:appcastData options:options error:errorp];
     if (nil == document) {
         return nil;
+    }
+
+    NSString *imageURLNodeStringValue = [document nodesForXPath:@"/rss/channel/image/url" error:nil].firstObject.stringValue;
+    if (imageURLNodeStringValue) {
+        self.imageURL = [[NSURL alloc] initWithString:imageURLNodeStringValue];
     }
 
     NSArray *xmlItems = [document nodesForXPath:@"/rss/channel/item" error:errorp];

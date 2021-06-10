@@ -115,7 +115,7 @@
             // then we remove the extension. Hopefully, this will be the version.
             NSArray<NSString *> *fileComponents = [(NSString *)[enclosure objectForKey:SURSSAttributeURL] componentsSeparatedByString:@"_"];
             if ([fileComponents count] > 1) {
-                newVersion = [[fileComponents lastObject] stringByDeletingPathExtension];
+                newVersion = [(NSString *)[fileComponents lastObject] stringByDeletingPathExtension];
             }
         }
 

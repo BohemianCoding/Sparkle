@@ -85,11 +85,11 @@ int main(int argc, const char *argv[])
         // This tool should be executed as root, so we should not try to authorize
         SUFileManager *fileManager = [SUFileManager defaultManager];
         
-        if ([command isEqualToString:(NSString *)@(SUFileOpRemoveQuarantineCommand)]) {
+        if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpRemoveQuarantineCommand)]) {
             if (![fileManager releaseItemFromQuarantineAtRootURL:fileURL error:NULL]) {
                 exit(SUQuarantineRemovalFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpCopyCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpCopyCommand)]) {
             if (destinationURL != nil) {
                 if (![fileManager copyItemAtURL:fileURL toURL:destinationURL error:NULL]) {
                     exit(SUCopyFailure);
@@ -97,7 +97,7 @@ int main(int argc, const char *argv[])
             } else {
                 exit(SUInvalidOrNoDestination | SUCopyFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpMoveCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpMoveCommand)]) {
             if (destinationURL != nil) {
                 if (![fileManager moveItemAtURL:fileURL toURL:destinationURL error:NULL]) {
                     exit(SUMoveFailure);
@@ -105,7 +105,7 @@ int main(int argc, const char *argv[])
             } else {
                 exit(SUInvalidOrNoDestination | SUMoveFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpChangeOwnerAndGroupCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpChangeOwnerAndGroupCommand)]) {
             if (destinationURL != nil) {
                 if (![fileManager changeOwnerAndGroupOfItemAtRootURL:fileURL toMatchURL:destinationURL error:NULL]) {
                     exit(SUChangeOwnerAndGroupFailure);
@@ -113,19 +113,19 @@ int main(int argc, const char *argv[])
             } else {
                 exit(SUInvalidOrNoDestination | SUChangeOwnerAndGroupFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpUpdateModificationAndAccessTimeCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpUpdateModificationAndAccessTimeCommand)]) {
             if (![fileManager updateModificationAndAccessTimeOfItemAtURL:fileURL error:NULL]) {
                 exit(SUTouchFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpMakeDirectoryCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpMakeDirectoryCommand)]) {
             if (![fileManager makeDirectoryAtURL:fileURL error:NULL]) {
                 exit(SUMakeDirectoryFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpRemoveCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpRemoveCommand)]) {
             if (![fileManager removeItemAtURL:fileURL error:NULL]) {
                 exit(SURemoveFailure);
             }
-        } else if ([command isEqualToString:(NSString *)@(SUFileOpInstallCommand)]) {
+        } else if ([command isEqualToString:(NSString * _Nonnull)@(SUFileOpInstallCommand)]) {
             // The one command that can *only* be run as the root user
             NSString *installerPath = @"/usr/sbin/installer";
             

@@ -378,6 +378,82 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     return finalString;
 }
 
+- (void)adaptReleaseNotesAppearance
+{
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101400
+    if (@available(macOS 10.14, *))
+    {
+        NSAppearanceName bestAppearance = [self.window.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+        BOOL isDarkAqua = ([bestAppearance isEqualToString:NSAppearanceNameDarkAqua]);
+        self.releaseNotesView.preferences.userStyleSheetEnabled = isDarkAqua;
+    }
+#endif
+}
+
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
+{
+    if ([(WebFrame *)frame parentFrame] == nil) {
+        self.webViewFinishedLoading = YES;
+        [self.releaseNotesSpinner setHidden:YES];
+        [sender display]; // necessary to prevent weird scroll bar artifacting
+    }
+}
+
+- (void)webView:(WebView *)__unused sender decidePolicyForNavigationAction:(NSDictionary *)__unused actionInformation request:(NSURLRequest *)request frame:(WebFrame *)__unused frame decisionListener:(id<WebPolicyDecisionListener>)listener
+{
+    NSURL *requestURL = request.URL;
+    NSString *scheme = requestURL.scheme;
+    BOOL whitelistedSafe = [scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"] || [requestURL.absoluteString isEqualToString:@"about:blank"];
+
+    // Do not allow redirects to dangerous protocols such as file://
+    if (!whitelistedSafe) {
+        SULog(SULogLevelDefault, @"Blocked display of %@ URL which may be dangerous", scheme);
+        [listener ignore];
+        return;
+    }
+
+    if (self.webViewFinishedLoading) {
+        if (requestURL) {
+            [[NSWorkspace sharedWorkspace] openURL:requestURL];
+        }
+
+        [listener ignore];
+    }
+    else {
+        [listener use];
+    }
+}
+
+// Clean up the contextual menu.
+- (NSArray *)webView:(WebView *)__unused sender contextMenuItemsForElement:(NSDictionary *)__unused element defaultMenuItems:(NSArray *)defaultMenuItems
+{
+    NSMutableArray *webViewMenuItems = [defaultMenuItems mutableCopy];
+
+	if (webViewMenuItems)
+	{
+		for (NSMenuItem *menuItem in defaultMenuItems)
+		{
+            NSInteger tag = [menuItem tag];
+
+			switch (tag)
+			{
+                case WebMenuItemTagOpenLinkInNewWindow:
+                case WebMenuItemTagDownloadLinkToDisk:
+                case WebMenuItemTagOpenImageInNewWindow:
+                case WebMenuItemTagDownloadImageToDisk:
+                case WebMenuItemTagOpenFrameInNewWindow:
+                case WebMenuItemTagGoBack:
+                case WebMenuItemTagGoForward:
+                case WebMenuItemTagStop:
+                case WebMenuItemTagReload:
+                    [webViewMenuItems removeObjectIdenticalTo:menuItem];
+            }
+        }
+    }
+
+    return webViewMenuItems;
+}
+
 - (NSTouchBar *)makeTouchBar
 {
     NSTouchBar *touchBar = [(NSTouchBar *)[NSClassFromString(@"NSTouchBar") alloc] init];
